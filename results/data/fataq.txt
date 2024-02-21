@@ -1,4 +1,4 @@
-You can download the data from NCBI's SRA: SRR23319405
+You can download the data from NCBI's SRA: SRR23319405 (normal) & SRX19261945: GSM7021456: Patient 10, lesion
 
 Download genome files from HISAT
 
