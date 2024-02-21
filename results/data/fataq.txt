@@ -1,1 +1,5 @@
+You can download the data from NCBI's SRA: SRR23319405
 
+Download genome files from HISAT
+
+Download gene annotation from Ensemle (GrCh38)
