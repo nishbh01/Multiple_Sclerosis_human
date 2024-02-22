@@ -1,0 +1,49 @@
+---
+title: "Differential_geneexpression_sclerosis_samples"
+author: "Nischal"
+date: "2024-02-22"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+setwd("/Users/nischal/Downloads/Bioinformatics/Multiple_Sclerosis_human/results")
+normal_sample <- read.delim("./normal_MS_gene_count_matrix.txt", header = TRUE)
+```
+
+```{r}
+colnames(normal_sample)[2] <- "normal_MS"
+head(normal_sample)
+
+```
+
+```{r}
+setwd("/Users/nischal/Downloads/Bioinformatics/Multiple_Sclerosis_human/results")
+progressive_sclerosis <- read.table("Multiple_sclerosis_gene_count_matrix.txt", header = TRUE, row.names = NULL, sep = "\t")
+```
+
+
+```{r}
+colnames(progressive_sclerosis)[2] <- "progressive_MS"
+head(progressive_sclerosis)
+```
+
+merging two datasets
+
+```{r}
+normalvsprogressiveMS <- merge(normal_sample, progressive_sclerosis, by = "Geneid", all = TRUE)
+head(normalvsprogressiveMS)
+```
+saving the file
+
+```{r}
+
+write.csv(normalvsprogressiveMS, "/Users/nischal/Downloads/Bioinformatics/Multiple_Sclerosis_human/results/normal_progressive_MS_gene_count.tsv", row.names = FALSE)
+
+```
+
+performing the differntial gene expression
