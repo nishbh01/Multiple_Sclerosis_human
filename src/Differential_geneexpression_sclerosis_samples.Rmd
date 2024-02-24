@@ -108,3 +108,48 @@ Quality Control
 ```{r}
 plotPCA(vsdata, intgroup = "condition")
 ```
+doesn't see to separe much. not the ideal separation.
+
+disperson plot
+```{r}
+plotDispEsts(dds)
+```
+
+
+```{r}
+# diff expressed genes
+
+diff_expressed_genes <- results(dds, contrast = c("condition", "progressive_Ms", "normal_MS"))
+```
+
+```{r}
+diff_expressed_genes
+```
+
+```{r}
+# filtering the signficiant genes
+
+sig_genes <- na.omit(diff_expressed_genes)
+
+```
+
+```{r}
+sig_genes <- sig_genes[sig_genes$padj < 0.05,]
+sig_genes
+```
+
+no significantly differntially expressed genes???
+
+```{r}
+diff_expressed_genes <- na.omit(diff_expressed_genes)
+diff_expressed_genes[diff_expressed_genes$padj < 0.05,]
+```
+
+```{r}
+diff_expressed_genes[diff_expressed_genes$padj < 0.1,]
+```
+
+
+```{r}
+diff_expressed_genes[diff_expressed_genes$padj < 0.5,]
+```
