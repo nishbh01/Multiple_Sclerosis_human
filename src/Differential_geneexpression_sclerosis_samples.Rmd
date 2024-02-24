@@ -26,24 +26,85 @@ setwd("/Users/nischal/Downloads/Bioinformatics/Multiple_Sclerosis_human/results"
 progressive_sclerosis <- read.table("Multiple_sclerosis_gene_count_matrix.txt", header = TRUE, row.names = NULL, sep = "\t")
 ```
 
-
 ```{r}
 colnames(progressive_sclerosis)[2] <- "progressive_MS"
 head(progressive_sclerosis)
 ```
-
-merging two datasets
+```{r}
+# reading other genecount reads from other patients.
+setwd("/Users/nischal/Downloads/MS/results")
+patient4_7_reads <- read.delim("features4_7_count.tsv", header = TRUE)
+head(patient4_7_reads)
+```
+merging all datasets
 
 ```{r}
-normalvsprogressiveMS <- merge(normal_sample, progressive_sclerosis, by = "Geneid", all = TRUE)
-head(normalvsprogressiveMS)
+df_list <- list(normal_sample, progressive_sclerosis, patient4_7_reads)
+normalvsprogressiveMS <- Reduce(function(x, y) merge(x, y, all=TRUE), df_list)
 ```
+
+# save file
+
 saving the file
 
 ```{r}
 
-write.csv(normalvsprogressiveMS, "/Users/nischal/Downloads/Bioinformatics/Multiple_Sclerosis_human/results/normal_progressive_MS_gene_count.tsv", row.names = FALSE)
-
+write.csv(normalvsprogressiveMS, "/Users/nischal/Downloads/Bioinformatics/Multiple_Sclerosis_human/results/normal_progressive_MS_gene_count_5patients.tsv", row.names = FALSE)
 ```
 
-performing the differntial gene expression
+performing the differential gene expression
+
+```{r}
+library(DESeq2)
+library(ggplot2)
+```
+
+```{r}
+rownames(normalvsprogressiveMS) <- normalvsprogressiveMS$Geneid
+
+normalvsprogressiveMS <- normalvsprogressiveMS[, -1]
+```
+```{r}
+normalvsprogressiveMS <- normalvsprogressiveMS[which(rowSums(normalvsprogressiveMS) >50), ]
+head(normalvsprogressiveMS)
+```
+
+now, we have only 11,325 genes compared to 61k+ genes
+
+```{r}
+colnames(normalvsprogressiveMS)
+```
+```{r}
+condition <- factor(c("normal_MS", "progressive_Ms", "progressive_Ms", "progressive_Ms", "normal_MS", "progressive_Ms", "normal_MS", "progressive_Ms", "normal_MS", "normal_MS"))
+```
+
+  
+```{r}
+coldata <- data.frame(row.names = colnames(normalvsprogressiveMS), condition)
+```
+
+```{r}
+coldata
+```
+
+creating dseq matrix
+
+```{r}
+dds <- DESeqDataSetFromMatrix(countData = normalvsprogressiveMS, colData = coldata, design = ~condition)
+```
+
+```{r}
+dds <- DESeq(dds)
+```
+
+```{r}
+vsdata <- vst(dds, blind = FALSE)
+```
+
+Quality Control
+
+1. Plot PCA
+
+```{r}
+plotPCA(vsdata, intgroup = "condition")
+```
