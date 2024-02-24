@@ -52,6 +52,9 @@ saving the file
 write.csv(normalvsprogressiveMS, "/Users/nischal/Downloads/Bioinformatics/Multiple_Sclerosis_human/results/normal_progressive_MS_gene_count_5patients.tsv", row.names = FALSE)
 ```
 
+```{r}
+normalvsprogressiveMS <- read.csv( "/Users/nischal/Downloads/Bioinformatics/Multiple_Sclerosis_human/results/normal_progressive_MS_gene_count_5patients.tsv", header = TRUE)
+```
 performing the differential gene expression
 
 ```{r}
@@ -69,7 +72,6 @@ normalvsprogressiveMS <- normalvsprogressiveMS[which(rowSums(normalvsprogressive
 head(normalvsprogressiveMS)
 ```
 
-now, we have only 11,325 genes compared to 61k+ genes
 
 ```{r}
 colnames(normalvsprogressiveMS)
@@ -106,8 +108,9 @@ Quality Control
 1. Plot PCA
 
 ```{r}
-plotPCA(vsdata, intgroup = "condition")
+pca_plotted <- plotPCA(vsdata, intgroup = "condition")
 ```
+
 doesn't see to separe much. not the ideal separation.
 
 disperson plot
@@ -151,5 +154,9 @@ diff_expressed_genes[diff_expressed_genes$padj < 0.1,]
 
 
 ```{r}
-diff_expressed_genes[diff_expressed_genes$padj < 0.5,]
+diff_expressed_genes_p0.4 <- diff_expressed_genes[diff_expressed_genes$padj < 0.4,]
+```
+
+```{r}
+write.csv(diff_expressed_genes_p0.4, "/Users/nischal/Downloads/Multiple_Sclerosis_human/results/not_so_diff_exp_genes_p0.4", row.names = TRUE)
 ```
