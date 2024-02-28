@@ -29,7 +29,12 @@ fastqc ./data/SRR23319405_trimmed.fastq -o ./data/
 # alignment to reference genome grch38
 echo "running alignment with HISAT2" 
 # aligning normal and progressive fastaq files.
-/Users/nischal/Downloads/Bioinformatics/hisat2/hisat2 -q --rna-strandness R -x /Users/nischal/Downloads/Bioinformatics/grch38/genome -U ./data/SRR23319405_trimmed.fastq ./results/SRR23319406_lesion_trimmed.fastq | samtools sort -o ./results/SRR23319406_normal_lesion_sorted.bam
+
+for file in ls *.fastq; do
+    echo "Starting alignment for ${file}"
+    /Users/nischal/Downloads/Bioinformatics/hisat2/hisat2 -q --rna-strandness R -x /Users/nischal/Downloads/Bioinformatics/grch38/genome -U ./data/${file} | samtools sort -o ./results/${file}_sorted.bam
+    echo "Completed alignment for ${file}"
+done
 
 # gene annotation
 
@@ -40,7 +45,8 @@ echo "running alignment with HISAT2"
 # get gtf
 # wget http://ftp.ensembl.org/pub/release-106/gtf/homo_sapiens/Homo_sapiens.GRCh38.106.gtf.gz
 echo "starting feature counts"
-/Users/nischal/Downloads/Bioinformatics/subread-2.0.5-macOS-x86_64/bin/featureCounts -S 2 -a /Users/nischal/Downloads/Bioinformatics/Homo_sapiens.GRCh38.106.gtf -o ./results/SRR23319405_featurecounts.txt ./results/SRR23319406_normal_lesion_sorted.bam
+/Users/nischal/Downloads/Bioinformatics/subread-2.0.5-macOS-x86_64/bin/featureCounts -S 2 -a /Users/nischal/Downloads/Bioinformatics/Homo_sapiens.GRCh38.106.gtf -o ./results/SRR23319405_featurecounts.txt ./results/*.bam
+echo -e "\n"
 echo "featureCounts finished running!"
 
 # save the gene ids and their count
