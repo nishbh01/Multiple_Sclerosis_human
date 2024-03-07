@@ -1,0 +1,8 @@
+./p4_lesion_SRR23319416.fastq
+./p7_NAWM_SRR23319409.fastq
+./p5_lesion_SRR23319414.fastq
+./p7_lesion_SRR23319410.fastq
+./p6_NAWM_SRR23319411.fastq
+./patient4_NAWM_SRR23319415.fastq
+./p6_lesion_SRR23319412.fastq
+./patient_5_NAWMSRR23319413.fastq

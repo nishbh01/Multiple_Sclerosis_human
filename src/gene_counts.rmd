@@ -1,0 +1,23 @@
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("tximport")
+```
+
+```{r}
+
+library(tximport)
+
+# List of sample directories
+sample_dirs <- file.path("quant_results*", list.files("quant_results"))
+
+# Create a vector of file paths
+files <- file.path(sample_dirs, "quant.sf")
+names(files) <- list.files("quant_results")
+
+# Create a tximport object
+txi <- tximport(files, type = "salmon", tx2gene = NULL)
+
+# Get gene-level counts
+gene_counts <- data.table::as.data.table(txi$counts)
+```
